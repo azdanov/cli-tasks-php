@@ -3,16 +3,29 @@
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\RuntimeException;
+use Task\AddCommand;
+use Task\DatabaseAdapter;
 use Task\ShowCommand;
 
 require __DIR__.'/vendor/autoload.php';
 
 $app = new Application('Task App', '1.0');
 
-$app->add(new ShowCommand());
+try {
+    $pdo = new PDO('sqlite:tasks.db');
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (\PDOException $e) {
+    throw new RuntimeException('Can\'t start database.', $e->getMessage());
+}
+
+$dbAdapter = new DatabaseAdapter($pdo);
+
+$app->add(new ShowCommand($dbAdapter));
+$app->add(new AddCommand($dbAdapter));
 
 try {
     $app->run();
 } catch (\Exception $e) {
-    throw new RuntimeException('Problem starting application.', $e->getMessage());
+    throw new RuntimeException('Can\'t start application.', $e->getMessage());
 }
