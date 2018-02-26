@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Task;
 
 /**
- * Generic Database Adapter for usage with CLI Task application
+ * Generic Database Adapter for usage with CLI Task application.
  */
 class DatabaseAdapter
 {
@@ -32,7 +32,7 @@ class DatabaseAdapter
     public function fetchAll(string $tableName): array
     {
         return $this->connection
-            ->query("select * from $tableName")
+            ->query("SELECT * FROM $tableName")
             ->fetchAll();
     }
 

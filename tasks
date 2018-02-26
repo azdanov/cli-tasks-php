@@ -4,12 +4,13 @@
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Task\AddCommand;
+use Task\CompleteCommand;
 use Task\DatabaseAdapter;
 use Task\ShowCommand;
 
 require __DIR__.'/vendor/autoload.php';
 
-$app = new Application('Task App', '1.0');
+$app = new Application('Tasks App', '1.0');
 
 try {
     $pdo = new PDO('sqlite:tasks.db');
@@ -23,6 +24,7 @@ $dbAdapter = new DatabaseAdapter($pdo);
 
 $app->add(new ShowCommand($dbAdapter));
 $app->add(new AddCommand($dbAdapter));
+$app->add(new CompleteCommand($dbAdapter));
 
 try {
     $app->run();

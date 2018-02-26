@@ -7,22 +7,23 @@ namespace Task;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use function compact;
 
 /**
- * Class AddCommand.
+ * Class CompleteCommand.
  */
-class AddCommand extends Command
+class CompleteCommand extends Command
 {
     /**
-     * Configuration for add.
+     * Configuration for complete.
      *
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     public function configure(): void
     {
-        $this->setName('add')
-            ->setDescription('Add a new task')
-            ->addArgument('description', InputArgument::REQUIRED);
+        $this->setName('complete')
+            ->setDescription('complete a task by its id')
+            ->addArgument('id', InputArgument::REQUIRED);
     }
 
     /**
@@ -30,19 +31,17 @@ class AddCommand extends Command
      * @param OutputInterface $output
      *
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
-     *
-     * @return int|void|null
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): void
     {
-        $description = $input->getArgument('description');
+        $id = $input->getArgument('id');
 
         $this->database->query(
-            'INSERT INTO tasks(description) VALUES(:description)',
-            compact('description')
+            'DELETE FROM tasks WHERE id = :id',
+            compact('id')
         );
 
-        $output->writeln('<info>Task Added!</info>');
+        $output->writeln('<info>Task Completed!</info>');
 
         $this->showTasks($output);
     }
