@@ -1,0 +1,13 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Task\\": "src"
+    }
+  },
+  "require": {
+    "symfony/console": "~4.0"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master"
+  }
+}
